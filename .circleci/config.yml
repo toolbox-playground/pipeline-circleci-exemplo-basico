@@ -15,7 +15,7 @@ jobs:
       # Build the project
       - run:
           name: Build Application
-          command: dotnet build --configuration Release
+          command: dotnet build
 
       # Run tests (if any)
       - run:
@@ -26,10 +26,10 @@ jobs:
               --collect:"Code Coverage" --verbosity n
 
       - store_test_results:
-          path: test-coverage
+          path: ./test-coverage
 
       - store_artifacts:
-          path: test-coverage
+          path: ./test-coverage
 
 workflows:
   version: 2
