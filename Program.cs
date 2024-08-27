@@ -4,22 +4,21 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-public class Program
+namespace pipeline_circleci_exemplo_basico
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container (if needed).
-        // For this simple example, no additional services are required.
+            var app = builder.Build();
 
-        var app = builder.Build();
+            app.UseRouting();
 
-        // Configure the HTTP request pipeline.
-        app.UseRouting();
+            app.MapGet("/", () => "Hello, World!");
 
-        app.MapGet("/", () => "Hello, World!");
-
-        app.Run();
+            app.Run();
+        }
     }
 }
