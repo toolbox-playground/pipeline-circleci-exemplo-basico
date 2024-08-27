@@ -23,7 +23,7 @@ jobs:
           command: | 
             cd ./HelloWorld.Tests
             dotnet restore
-            dotnet test --no-build --nologo --results-directory:test_coverage \
+            dotnet test HelloWorld.Tests --no-build --nologo --results-directory:test_coverage \
             --collect:"Code Coverage" --verbosity n
 
       - store_test_results:
