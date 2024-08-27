@@ -20,7 +20,16 @@ jobs:
       # Run tests (if any)
       - run:
           name: Run Tests
-          command: dotnet test ./Tests/Tests.csproj --no-build --nologo --results-directory:test_coverage --collect:"Code Coverage" --verbosity m
+          command: | 
+            dotnet test ./Tests/Tests.csproj \
+              --no-build --nologo --results-directory:test-coverage \
+              --collect:"Code Coverage" --verbosity n
+
+      - store_test_results:
+          path: test-coverage
+
+      - store_artifacts:
+          path: test-coverage
 
 workflows:
   version: 2
