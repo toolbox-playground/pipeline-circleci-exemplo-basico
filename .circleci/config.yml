@@ -27,10 +27,10 @@ jobs:
             --collect:"Code Coverage" --verbosity n
 
       - store_test_results:
-          path: ./test-coverage
+          path: ./HelloWorld.Tests/test-coverage
 
       - store_artifacts:
-          path: ./test-coverage
+          path: ./HelloWorld.Tests/test-coverage
 
 workflows:
   version: 2
