@@ -21,9 +21,10 @@ jobs:
       - run:
           name: Run Tests
           command: | 
-            dotnet test ./UnitTests/UnitTests.csproj \
-              --no-build --nologo --results-directory:test-coverage \
-              --collect:"Code Coverage" --verbosity n
+            cd ./HelloWorld.Tests
+            dotnet restore
+            dotnet test --no-build --nologo --results-directory:test_coverage \
+            --collect:"Code Coverage" --verbosity n
 
       - store_test_results:
           path: ./test-coverage
