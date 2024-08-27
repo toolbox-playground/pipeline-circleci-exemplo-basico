@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Run Tests
           command: | 
-            dotnet test ./Tests/Tests.csproj \
+            dotnet test ./UnitTests/UnitTests.csproj \
               --no-build --nologo --results-directory:test-coverage \
               --collect:"Code Coverage" --verbosity n
 
