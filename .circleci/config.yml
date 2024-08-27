@@ -21,9 +21,6 @@ jobs:
       - run:
           name: Run Tests
           command: | 
-            cd ./HelloWorld.Tests
-            dotnet restore
-            cd ..
             dotnet test HelloWorld.Tests --no-build --nologo --results-directory:test_coverage \
             --collect:"Code Coverage" --verbosity n
 
