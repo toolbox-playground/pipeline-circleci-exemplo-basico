@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:8.0
+    steps:
+      - checkout
+
+      # Restore dependencies
+      - run:
+          name: Restore Dependencies
+          command: dotnet restore
+
+      # Build the project
+      - run:
+          name: Build Application
+          command: dotnet build --configuration Release
+
+      # Run tests (if any)
+      - run:
+          name: Run Tests
+          command: dotnet test --no-build --verbosity normal
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
