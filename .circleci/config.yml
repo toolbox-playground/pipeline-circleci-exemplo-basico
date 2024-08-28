@@ -10,6 +10,12 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Installing Dependencies
+          command: |
+            sudo apt update
+            sudo apt install dotnet8
+
       # Restore dependencies
       - run:
           name: Restore Dependencies
