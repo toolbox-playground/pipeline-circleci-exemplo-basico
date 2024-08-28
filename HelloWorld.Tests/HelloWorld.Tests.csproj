@@ -8,7 +8,6 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
