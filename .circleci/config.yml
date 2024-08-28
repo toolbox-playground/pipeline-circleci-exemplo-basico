@@ -25,8 +25,7 @@ jobs:
       - run:
           name: "Test the executable"
           command: |
-            dotnet.exe test HelloWorld.Tests --no-build --nologo \
-            --results-directory:C:\Users\circleci\project\test_coverage --collect:"Code Coverage" --verbosity n
+            dotnet.exe test HelloWorld.Tests --no-build --nologo --results-directory:C:\Users\circleci\project\test_coverage --collect:"Code Coverage" --verbosity n
       - store_artifacts:
           path: C:\Users\circleci\project\test_coverage
 
