@@ -1,12 +1,14 @@
 version: 2.1
 
+orbs:
+  mac: circleci/macos@2.5.2
+  windows: circleci/windows@2.2.0
+
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: medium
-    #docker:
-    #  - image: mcr.microsoft.com/dotnet/sdk:8.0
+    executor:
+      name: mac/default
+
     steps:
       - checkout
 
