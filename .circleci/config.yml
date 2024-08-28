@@ -25,7 +25,7 @@ jobs:
           name: Installing ASP.NET Core Runtime
           shell: powershell.exe
           command: |
-            choco install aspnetcore-runtime -y --no-progress
+            choco install dotnet-aspnetcore-runtime -y --no-progress
 
       # Restore dependencies for all projects
       - run:
