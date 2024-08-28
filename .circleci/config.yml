@@ -1,36 +1,58 @@
 version: 2.1
 
-orbs:
-  win: circleci/windows@5.0.0
+jobs:
+  build:
+    machine:
+      image: windows-server-2022
+    steps:
+      - checkout
+
+      - run:
+          name: Installing Chocolatey
+          shell: powershell.exe
+          command: |
+            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+      - run:
+          name: Installing .NET SDK
+          shell: powershell.exe
+          command: |
+            choco install dotnet-sdk --version=8.0.100 -y --no-progress
+
+      - run:
+          name: Installing ASP.NET Core Runtime
+          shell: powershell.exe
+          command: |
+            choco install aspnetcore-runtime -y --no-progress
+
+      # Restore dependencies for all projects
+      - run:
+          name: Restore Dependencies
+          shell: powershell.exe
+          command: dotnet restore
+
+      # Build the main project and test project explicitly
+      - run:
+          name: Build All Projects
+          shell: powershell.exe
+          command: dotnet build --configuration Debug
+
+      # Run tests
+      - run:
+          name: Run Tests
+          shell: powershell.exe
+          command: |
+            dotnet test HelloWorld.Tests/HelloWorld.Tests.csproj --nologo --results-directory:test_coverage `
+            --collect:"Code Coverage" --verbosity normal
+
+      - store_test_results:
+          path: ./HelloWorld.Tests/test-coverage
+
+      - store_artifacts:
+          path: ./HelloWorld.Tests/test-coverage
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
-
-jobs:
-  build:
-    executor:
-      name: win/default
-    working_directory: C:\Users\circleci\project
-    steps:
-      - checkout
-      - run:
-          name: "Install project dependencies"
-          command: dotnet.exe restore
-      - run:
-          name: "Run Build step"
-          command: dotnet.exe build
-      - run:
-          name: "Test the executable"
-          command: |
-            dotnet.exe test HelloWorld.Tests --no-build --nologo --results-directory:C:\Users\circleci\project\test_coverage --collect:"Code Coverage" --verbosity n
-      - store_artifacts:
-          path: C:\Users\circleci\project\test_coverage
-
-      - store_test_results:
-          path: C:\Users\circleci\project\test_coverage
-
-      - store_artifacts:
-          path: ./HelloWorld.Tests/test-coverage
