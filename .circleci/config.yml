@@ -1,28 +1,26 @@
 version: 2.1
 
-orbs:
-  win: circleci/windows@4.1.1 # The Windows orb gives you everything you need to start using the Windows executor
+executors:
+  windows:
+    machine:
+      image: windows-server-2019
 
 jobs:
   build:
-    executor: win/server-2022 # use one of the executors defined within the windows orb
-    # machine:
-    #  image: ubuntu-2004:current
-    #resource_class: medium
-    #docker:
-    #  - image: mcr.microsoft.com/dotnet/sdk:8.0
+    executor: windows
     steps:
       - checkout
 
       - run:
           name: Installing Dependencies
           command: |
-            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-            sudo dpkg -i packages-microsoft-prod.deb
-            rm packages-microsoft-prod.deb
+            curl -L -o packages-microsoft-prod.deb https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+            Start-Process msiexec.exe -ArgumentList '/i', 'packages-microsoft-prod.deb', '/quiet', '/norestart' -Wait
+            Remove-Item packages-microsoft-prod.deb
 
-            sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
-            sudo apt-get update && sudo apt-get install -y aspnetcore-runtime-8.0
+            choco install dotnet-sdk --version=8.0.100
+            choco install aspnetcore-runtimepackagestore --version=8.0.100
+
       # Restore dependencies
       - run:
           name: Restore Dependencies
@@ -36,8 +34,8 @@ jobs:
       # Run tests (if any)
       - run:
           name: Run Tests
-          command: | 
-            dotnet test HelloWorld.Tests --no-build --nologo --results-directory:test_coverage \
+          command: |
+            dotnet test HelloWorld.Tests --no-build --nologo --results-directory:test_coverage `
             --collect:"Code Coverage" --verbosity n
 
       - store_test_results:
