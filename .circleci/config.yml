@@ -21,11 +21,16 @@ jobs:
           command: |
             choco install dotnet-sdk --version=8.0.100 -y --no-progress
 
+
       - run:
-          name: Installing ASP.NET Core Runtime
+          name: Installing ASP.NET Core Runtime via Direct Download
           shell: powershell.exe
           command: |
-            choco install dotnet-aspnetcore-runtime -y --no-progress
+            $runtimeUrl = "https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-aspnetcore-8.0.0-windows-hosting-bundle-installer"
+            $output = "aspnetcore-runtime-installer.exe"
+            Invoke-WebRequest -Uri $runtimeUrl -OutFile $output
+            Start-Process -FilePath .\$output -ArgumentList "/quiet", "/norestart" -Wait
+            Remove-Item .\$output
 
       # Restore dependencies for all projects
       - run:
