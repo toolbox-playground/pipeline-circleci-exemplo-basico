@@ -10,28 +10,34 @@ jobs:
       - checkout
 
       - run:
-          name: Installing Dependencies
+          name: Installing Chocolatey
+          shell: powershell.exe
           command: |
-            curl -L -o packages-microsoft-prod.deb https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
-            Start-Process msiexec.exe -ArgumentList '/i', 'packages-microsoft-prod.deb', '/quiet', '/norestart' -Wait
-            Remove-Item packages-microsoft-prod.deb
+            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
-            choco install dotnet-sdk --version=8.0.100
-            choco install aspnetcore-runtimepackagestore --version=8.0.100
+      - run:
+          name: Installing Dependencies
+          shell: powershell.exe
+          command: |
+            choco install dotnet-sdk --version=8.0.100 -y --no-progress
+            choco install aspnetcore-runtime --version=8.0.100 -y --no-progress
 
       # Restore dependencies
       - run:
           name: Restore Dependencies
+          shell: powershell.exe
           command: dotnet restore
 
       # Build the project
       - run:
           name: Build Application
+          shell: powershell.exe
           command: dotnet build
 
       # Run tests (if any)
       - run:
           name: Run Tests
+          shell: powershell.exe
           command: |
             dotnet test HelloWorld.Tests --no-build --nologo --results-directory:test_coverage `
             --collect:"Code Coverage" --verbosity n
